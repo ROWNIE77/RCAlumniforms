@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative; /* This is necessary for the pseudo-element */
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('file:///C:/Users/Administrator/Downloads/1.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(0px); /* Adjust the blur amount as needed */
+            z-index: -1; /* Place the blurred image behind the content */
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        h2 {
+            text-align: center;  /* Center align */
+            font-size: 1.5em;    /* Slightly larger text */
+            font-weight: 700;   /* Medium weight for the title */
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 500;   /* Medium weight for labels */
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif; /* Ensure inputs also use Roboto */
+        }
+        textarea {
+            resize: none;  /* This makes textareas non-resizeable */
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px; /* Space between buttons */
+            font-family: 'Roboto', Arial, sans-serif; /* Use Roboto for buttons */
+            font-weight: 500;   /* Medium weight for button text */
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #clearSignature {
+            background-color: #ff6347; /* Tomato color for clear button */
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;  /* Adjust spacing as needed */
+        }
+
+        .left-buttons {
+            display: flex;
+            gap: 10px;  /* Space between Clear Signature and Submit */
+        }
+
+        input:placeholder-shown, textarea:placeholder-shown {
+            background-color: #f0f8ff; /* Light bluish color */
+            border-color: #add8e6; /* Slightly darker bluish border */
+        }
+
+        input:not(:placeholder-shown), textarea:not(:placeholder-shown) {
+            background-color: white; /* Reset to white when filled */
+            border-color: #ddd; /* Reset border color */
+        }
+    </style>
+</head>
+<body>
+
+<form id="alumniForm">
+    <h2>ALUMNI INFORMATION FORM</h2>
+    <p style="text-align: justify; font-style: italic; font-family: 'Roboto', Arial, sans-serif;">
+        By clicking the submit button, you consent to the collection, use, and processing of your data as described in our privacy policy. We assure that your data will be handled in accordance with relevant data protection laws and will be used for the purpose of alumni networking, updates, and institutional communication only.
+    </p>
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+
+    <label for="middleName">Middle Name:</label>
+    <input type="text" id="middleName" name="middleName" placeholder="Enter your middle name">
+
+    <label for="department">Department:</label>
+    <select id="department" name="department" required>
+        <option value="">Select Department</option>
+        <option value="JHS">JHS</option>
+        <option value="SHS">SHS</option>
+        <option value="College">College</option>
+        <option value="TED">TED</option>
+    </select>
+
+    <div id="strands" style="display:none;">
+        <label for="strand">SHS Strand:</label>
+        <select id="strand" name="strand">
+            <option value="">Select Strand</option>
+            <option value="ABM">ABM</option>
+            <option value="STEM">STEM</option>
+            <option value="HUMSS">GA - HUMSS</option>
+        </select>
+    </div>
+
+    <div id="courses" style="display:none;">
+        <label for="course">College Course:</label>
+        <select id="course" name="course">
+            <!-- Courses will be populated by JavaScript -->
+        </select>
+    </div>
+
+    <label for="batch">Batch:</label>
+    <select id="batch" name="batch" required>
+        <!-- Years will be populated by JavaScript -->
+    </select>
+
+    <label for="section">Section:</label>
+    <input type="text" id="section" name="section" required placeholder="Enter your section">
+
+    <label for="birthdate">Birthdate:</label>
+    <input type="date" id="birthdate" name="birthdate" required placeholder="Enter your birthdate">
+
+    <label for="phone">Phone Number (11 digits):</label>
+    <input type="tel" id="phone" name="phone" pattern="\d{11}" required placeholder="Enter your phone number">
+
+    <label for="gmail">Gmail:</label>
+    <input type="email" id="gmail" name="gmail" required placeholder="Enter your Gmail">
+
+    <label for="address">Address:</label>
+    <textarea id="address" name="address" required placeholder="Enter your address"></textarea>
+
+    <label for="emergencyContact">Emergency Contact:</label>
+    <input type="text" id="emergencyContact" name="emergencyContact" required placeholder="Enter emergency contact">
+
+    <label for="emergencyPhone">Emergency Phone (11 digits):</label>
+    <input type="tel" id="emergencyPhone" name="emergencyPhone" pattern="\d{11}" required placeholder="Enter emergency phone">
+
+    <label for="emergencyAddress">Emergency Address:</label>
+    <textarea id="emergencyAddress" name="emergencyAddress" required placeholder="Enter emergency address"></textarea>
+
+    <label for="signature">Signature:</label>
+    <canvas id="signatureCanvas" width="300" height="150"></canvas>
+    <input type="hidden" id="signatureData" name="Signature (Base64)">
+
+    <div class="button-group">
+        <div class="left-buttons">
+            <button type="button" id="clearSignature">Clear Signature</button>
+            <button type="submit">Submit</button>
+        </div>
+        <div class="right-button">
+            <button type="button" id="resetForm">Reset Form</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.getElementById('alumniForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        fetch('https://script.google.com/macros/s/AKfycbwqHpRmHJRnbKdusYqqX_liKBo_40rrdDAWbltdLYkwPMbhZM6VbwZ3g06-dPVFQD300A/exec', { // Replace with your web app URL
+            method: 'POST',
+            body: new FormData(this)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === 'success') {
+                alert('Form submitted successfully!');
+                // You might want to reset the form here or navigate to another page
+            } else {
+                alert('Error submitting the form: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    const department = document.getElementById('department');
+    const strandsDiv = document.getElementById('strands');
+    const coursesDiv = document.getElementById('courses');
+    const courseSelect = document.getElementById('course');
+
+    department.addEventListener('change', function() {
+        strandsDiv.style.display = 'none';
+        coursesDiv.style.display = 'none';
+        if (this.value === 'SHS') {
+            strandsDiv.style.display = 'block';
+        } else if (this.value === 'College') {
+            coursesDiv.style.display = 'block';
+            populateCourses();
+        }
+    });
+
+    function populateCourses() {
+        const courses = [
+            "Bachelor of Science in Accountancy",
+            "Bachelor of Science in Business Administration Major in Marketing Management",
+            "Bachelor of Science in Hospitality Management",
+            "Bachelor of Science in Tourism Management",
+            "Bachelor of Science in Information Technology",
+            "Bachelor of Science in Electronics Engineering",
+            "Bachelor of Science in Industrial Technology Major in Automotive Technology",
+            "Bachelor of Science in Industrial Technology Major in Mechanical Technology",
+            "Bachelor of Secondary Education Major in English",
+            "Bachelor of Elementary Education"
+        ];
+        courseSelect.innerHTML = '<option value="">Select Course</option>';
+        courses.forEach(course => {
+            let option = document.createElement('option');
+            option.value = course;
+            option.text = course;
+            courseSelect.appendChild(option);
+        });
+    }
+
+    // Populate batch years from 1991 to 2030
+    const batch = document.getElementById('batch');
+    for(let year = 1991; year <= 2030; year++) {
+        let option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        batch.appendChild(option);
+    }
+
+    // Signature functionality
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    function startDrawing(e) {
+        isDrawing = true;
+        draw(e);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+
+    function stopDrawing() {
+        isDrawing = false;
+        ctx.beginPath();
+        // Here you convert the canvas to base64
+        document.getElementById('signatureData').value = canvas.toDataURL();
+    }
+
+    // Clear signature functionality
+    document.getElementById('clearSignature').addEventListener('click', function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('signatureData').value = ''; // Clear the hidden input too
+    });
+
+    // Reset form functionality
+    document.getElementById('resetForm').addEventListener('click', function() {
+        document.getElementById('alumniForm').reset();
+        // Reset the canvas for signature
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('signatureData').value = ''; // Clear the hidden signature data input
+    });
+</script>
+
+</body>
+</html>
