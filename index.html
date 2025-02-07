@@ -575,20 +575,3 @@
 
 </body>
 </html>
-    // Clear signature functionality
-    document.getElementById('clearSignature').addEventListener('click', function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById('signatureData').value = ''; // Clear the hidden input too
-    });
-
-    // Reset form functionality
-    document.getElementById('resetForm').addEventListener('click', function() {
-        document.getElementById('alumniForm').reset();
-        // Reset the canvas for signature
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById('signatureData').value = ''; // Clear the hidden signature data input
-    });
-</script>
-
-</body>
-</html>
