@@ -10,7 +10,7 @@
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            position: relative; /* This is necessary for the pseudo-element */
+            position: relative;
         }
         body::before {
             content: "";
@@ -22,8 +22,8 @@
             background-image: url('https://raw.githubusercontent.com/ROWNIE77/RCAlumniforms/main/1.jpg');
             background-size: cover;
             background-repeat: no-repeat;
-            filter: blur(0px); /* Adjust the blur amount as needed */
-            z-index: -1; /* Place the blurred image behind the content */
+            filter: blur(0px);
+            z-index: -1;
         }
         form {
             background: white;
@@ -34,14 +34,14 @@
             margin: 20px auto;
         }
         h2 {
-            text-align: center;  /* Center align */
-            font-size: 1.5em;    /* Slightly larger text */
-            font-weight: 700;   /* Medium weight for the title */
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
         }
         label {
             display: block;
             margin: 10px 0 5px;
-            font-weight: 500;   /* Medium weight for labels */
+            font-weight: 500;
         }
         input, select, textarea {
             width: 100%;
@@ -50,10 +50,10 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
-            font-family: 'Roboto', Arial, sans-serif; /* Ensure inputs also use Roboto */
+            font-family: 'Roboto', Arial, sans-serif;
         }
         textarea {
-            resize: none;  /* This makes textareas non-resizeable */
+            resize: none;
         }
         canvas {
             border: 1px solid #000;
@@ -65,36 +65,55 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 10px; /* Space between buttons */
-            font-family: 'Roboto', Arial, sans-serif; /* Use Roboto for buttons */
-            font-weight: 500;   /* Medium weight for button text */
+            margin-right: 10px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-weight: 500;
         }
         button:hover {
             background-color: #45a049;
         }
         #clearSignature {
-            background-color: #ff6347; /* Tomato color for clear button */
+            background-color: #ff6347;
         }
         .button-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 10px;  /* Adjust spacing as needed */
+            margin-top: 10px;
         }
-
         .left-buttons {
             display: flex;
-            gap: 10px;  /* Space between Clear Signature and Submit */
+            gap: 10px;
         }
-
         input:placeholder-shown, textarea:placeholder-shown {
-            background-color: #f0f8ff; /* Light bluish color */
-            border-color: #add8e6; /* Slightly darker bluish border */
+            background-color: #f0f8ff;
+            border-color: #add8e6;
         }
-
         input:not(:placeholder-shown), textarea:not(:placeholder-shown) {
-            background-color: white; /* Reset to white when filled */
-            border-color: #ddd; /* Reset border color */
+            background-color: white;
+            border-color: #ddd;
+        }
+        .error {
+            border-color: red !important;
+        }
+        #loadingSpinner {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
@@ -177,80 +196,82 @@
     <div class="button-group">
         <div class="left-buttons">
             <button type="button" id="clearSignature">Clear Signature</button>
-            <button type="submit">Submit</button>
+            <button type="submit" id="submitButton">Submit</button>
         </div>
         <div class="right-button">
             <button type="button" id="resetForm">Reset Form</button>
         </div>
     </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Submitting...</p>
+    </div>
 </form>
 
 <script>
-    document.getElementById('alumniForm').addEventListener('submit', function(e) {
+    const form = document.getElementById('alumniForm');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const submitButton = document.getElementById('submitButton');
+
+    // Validate form before submission
+    const validateForm = () => {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('error'); // Highlight empty fields
+            } else {
+                field.classList.remove('error'); // Reset border color
+            }
+        });
+
+        // Additional validation for phone number
+        const phone = document.getElementById('phone').value;
+        if (!/^\d{11}$/.test(phone)) {
+            isValid = false;
+            alert('Phone number must be 11 digits.');
+        }
+
+        return isValid;
+    };
+
+    // Form submission handler
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        fetch('https://script.google.com/macros/s/AKfycbwqHpRmHJRnbKdusYqqX_liKBo_40rrdDAWbltdLYkwPMbhZM6VbwZ3g06-dPVFQD300A/exec', { // Replace with your web app URL
-            method: 'POST',
-            body: new FormData(this)
-        })
-        .then(response => response.json())
-        .then(data => {
+
+        if (!validateForm()) {
+            alert('Please fill out all required fields.');
+            return; // Stop submission if validation fails
+        }
+
+        // Show loading spinner
+        loadingSpinner.style.display = 'block';
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbwqHpRmHJRnbKdusYqqX_liKBo_40rrdDAWbltdLYkwPMbhZM6VbwZ3g06-dPVFQD300A/exec', {
+                method: 'POST',
+                body: new FormData(form),
+            });
+            const data = await response.json();
             if (data.result === 'success') {
                 alert('Form submitted successfully!');
-                // You might want to reset the form here or navigate to another page
             } else {
                 alert('Error submitting the form: ' + data.error);
             }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-
-    const department = document.getElementById('department');
-    const strandsDiv = document.getElementById('strands');
-    const coursesDiv = document.getElementById('courses');
-    const courseSelect = document.getElementById('course');
-
-    department.addEventListener('change', function() {
-        strandsDiv.style.display = 'none';
-        coursesDiv.style.display = 'none';
-        if (this.value === 'SHS') {
-            strandsDiv.style.display = 'block';
-        } else if (this.value === 'College') {
-            coursesDiv.style.display = 'block';
-            populateCourses();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form.');
+        } finally {
+            // Hide loading spinner
+            loadingSpinner.style.display = 'none';
+            submitButton.disabled = false;
         }
     });
-
-    function populateCourses() {
-        const courses = [
-            "Bachelor of Science in Accountancy",
-            "Bachelor of Science in Business Administration Major in Marketing Management",
-            "Bachelor of Science in Hospitality Management",
-            "Bachelor of Science in Tourism Management",
-            "Bachelor of Science in Information Technology",
-            "Bachelor of Science in Electronics Engineering",
-            "Bachelor of Science in Industrial Technology Major in Automotive Technology",
-            "Bachelor of Science in Industrial Technology Major in Mechanical Technology",
-            "Bachelor of Secondary Education Major in English",
-            "Bachelor of Elementary Education"
-        ];
-        courseSelect.innerHTML = '<option value="">Select Course</option>';
-        courses.forEach(course => {
-            let option = document.createElement('option');
-            option.value = course;
-            option.text = course;
-            courseSelect.appendChild(option);
-        });
-    }
-
-    // Populate batch years from 1991 to 2030
-    const batch = document.getElementById('batch');
-    for(let year = 1991; year <= 2030; year++) {
-        let option = document.createElement('option');
-        option.value = year;
-        option.text = year;
-        batch.appendChild(option);
-    }
 
     // Signature functionality
     const canvas = document.getElementById('signatureCanvas');
@@ -316,6 +337,54 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById('signatureData').value = ''; // Clear the hidden signature data input
     });
+
+    // Populate batch years from 1991 to 2030
+    const batch = document.getElementById('batch');
+    for(let year = 1991; year <= 2030; year++) {
+        let option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        batch.appendChild(option);
+    }
+
+    // Department change handler
+    const department = document.getElementById('department');
+    const strandsDiv = document.getElementById('strands');
+    const coursesDiv = document.getElementById('courses');
+    const courseSelect = document.getElementById('course');
+
+    department.addEventListener('change', function() {
+        strandsDiv.style.display = 'none';
+        coursesDiv.style.display = 'none';
+        if (this.value === 'SHS') {
+            strandsDiv.style.display = 'block';
+        } else if (this.value === 'College') {
+            coursesDiv.style.display = 'block';
+            populateCourses();
+        }
+    });
+
+    function populateCourses() {
+        const courses = [
+            "Bachelor of Science in Accountancy",
+            "Bachelor of Science in Business Administration Major in Marketing Management",
+            "Bachelor of Science in Hospitality Management",
+            "Bachelor of Science in Tourism Management",
+            "Bachelor of Science in Information Technology",
+            "Bachelor of Science in Electronics Engineering",
+            "Bachelor of Science in Industrial Technology Major in Automotive Technology",
+            "Bachelor of Science in Industrial Technology Major in Mechanical Technology",
+            "Bachelor of Secondary Education Major in English",
+            "Bachelor of Elementary Education"
+        ];
+        courseSelect.innerHTML = '<option value="">Select Course</option>';
+        courses.forEach(course => {
+            let option = document.createElement('option');
+            option.value = course;
+            option.text = course;
+            courseSelect.appendChild(option);
+        });
+    }
 </script>
 
 </body>
