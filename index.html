@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             position: relative;
+            overflow-x: hidden;
         }
         body::before {
             content: "";
@@ -32,23 +33,53 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             max-width: 600px;
             margin: 40px auto;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
         .logo {
             display: block;
-            margin: 0 auto 20px; /* Center the logo and add space below */
-            max-width: 150px; /* Adjust the size of the logo */
-            height: auto; /* Maintain aspect ratio */
+            margin: 0 auto 20px;
+            max-width: 150px;
+            height: auto;
         }
+      
         h2 {
             text-align: center;
             font-size: 1.5em;
             font-weight: 700;
             margin-bottom: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         label {
             display: block;
             margin: 15px 0 5px;
             font-weight: 500;
+            animation: slideInLeft 0.5s ease-out;
+        }
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         input, select, textarea {
             width: 100%;
@@ -58,6 +89,11 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-family: 'Roboto', Arial, sans-serif;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
         }
         textarea {
             resize: none;
@@ -65,6 +101,10 @@
         canvas {
             border: 1px solid #000;
             margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+        canvas:focus {
+            border-color: #4CAF50;
         }
         button {
             background-color: #4CAF50;
@@ -76,10 +116,11 @@
             margin-right: 10px;
             font-family: 'Roboto', Arial, sans-serif;
             font-weight: 500;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         button:hover {
             background-color: #45a049;
+            transform: scale(1.05);
         }
         #clearSignature {
             background-color: #ff6347;
