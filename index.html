@@ -26,6 +26,85 @@
             filter: blur(0px);
             z-index: -1;
         }
+
+        /* Styles for the landing screen */
+        .landing-screen {
+            position: fixed; /* Or absolute, depending on layout needs */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.75); /* Semi-transparent white */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Make sure it's above the blurred background */
+           transition: opacity 0.5s ease; /* Smooth transition for opacity */
+        }
+
+
+      .landing-container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        max-width: 600px; /* Adjust as needed */
+        width: 90%;      /* Make it responsive */
+        text-align: left; /* Align text to the left within the container */
+      }
+
+        .landing-screen h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333; /* Adjust color as needed */
+        }
+
+        .landing-screen p {
+            text-align: left; /* Align text to the left */
+            margin: 10px 0;
+            max-width: 100%; /* Ensure it doesn't overflow the container */
+            line-height: 1;  /* Single spacing */
+            color: #555; /* Adjust color as needed */
+
+        }
+        .landing-screen strong{
+           font-size: 1.1em;
+        }
+
+        .landing-screen button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-size: 1.2em;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            display: block;  /* Make the button a block element */
+            margin-left: auto; /* Push the button to the right */
+            margin-right: auto; /*Push the button to the center */
+
+        }
+
+        .landing-screen button:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            display: none !important; /* Use !important to override other styles */
+        }
+
+        .fade-out {
+          opacity: 0; /* Start with 0 opacity */
+          pointer-events: none; /* Prevent clicks on the fading element */
+        }
+
+        /* Existing form styles */
         form {
             background: white;
             padding: 30px;
@@ -49,7 +128,7 @@
             max-width: 150px;
             height: auto;
         }
-      
+
         h2 {
             text-align: center;
             font-size: 1.5em;
@@ -97,7 +176,6 @@
             opacity: 0.7;
             font-size: 0.875em;
         }
-
         input:focus, select:focus, textarea:focus {
             border-color: #4CAF50;
             box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
@@ -128,7 +206,7 @@
         button:hover {
             background-color: #45a049;
             transform: scale(1.05);
-    
+
         }
         #clearSignature {
             background-color: #ff6347;
@@ -172,7 +250,7 @@
             to {
                 transform: rotate(360deg);
             }
-        } 
+        }
         footer {
             text-align: center;
             padding: 10px;
@@ -181,17 +259,30 @@
             margin-top: 20px;
             color: #333;
         }
-        
+
         footer p {
         margin: 0;
         padding: 0;
         }
-        
+
     </style>
 </head>
 <body>
 
-<form id="alumniForm">
+<!-- Landing Screen -->
+<div class="landing-screen" id="landingScreen">
+  <div class="landing-container">
+    <h1>WELCOME</h1>
+    <p><strong>General Instructions</strong></p>
+      <p><strong>Submission:</strong> Only Click the submit button once, wait for the confirmation page to appear before exiting the forms.</p>
+      <p><strong>Response:</strong> You are allowed to submit one form. Never fill out again if advised by your adviser to do so.</p>
+      <p><strong>Signature:</strong> There is a canvas below the forms that can record signature strokes without the need of an upload section. You can reset the canvas using the Clear signature button below.</p>
+      <p><strong>Section:</strong> Type your section name in this format (ex. St. Hannibal).</p>
+    <button id="startButton">Start</button>
+  </div>
+</div>
+
+<form id="alumniForm" class="hidden">  <!-- Initially hidden -->
     <!-- Add the logo here -->
     <img src="https://raw.githubusercontent.com/ROWNIE77/RCAlumniforms/main/2.png" alt="Logo" class="logo">
 
@@ -202,7 +293,7 @@
     <p style="text-align: justify; font-style: italic; font-family: 'Roboto', Arial, sans-serif;">
         Your information will be kept confidential and used only by Rogationist College for internal purposes, such as school records and communication.
     </p>
-   
+
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
 
@@ -270,11 +361,11 @@
     <label for="signature">Signature:</label>
     <canvas id="signatureCanvas" width="300" height="150"></canvas>
     <input type="hidden" id="signatureData" name="Signature (Base64)">
-   
+
     <!-- Suggestion Box -->
     <label for="suggestion">Suggestion (Optional):</label>
     <textarea id="suggestion" name="suggestion" placeholder="Enter your suggestion"></textarea>
-   
+
     <!-- Guide for submitting form -->
     <p style="text-align: center; font-style: italic; font-family: 'Roboto', Arial, sans-serif; font-size: smaller;">
         After clicking the <b>submit</b> button, please wait for the confirmation message to appear before clicking again. Clicking the <b>clear signature</b> will only reset the canvas and clicking the <b>reset form</b> will reset the whole form.
@@ -296,11 +387,11 @@
         <div class="spinner"></div>
         <p>Submitting...</p>
     </div>
- 
+
     <!-- Footer -->
     <footer>
         <p>Designed and Developed by
-    </p> 
+    </p>
     <p><strong>JHON RONEL N. NERVEZA</strong>
     </p>
     <p><i>Rogationist College Office of External Affairs</i>
@@ -309,6 +400,21 @@
 </form>
 
 <script>
+    const landingScreen = document.getElementById('landingScreen');
+    const startButton = document.getElementById('startButton');
+    const alumniForm = document.getElementById('alumniForm');
+
+
+    startButton.addEventListener('click', () => {
+    // Add fade-out class to initiate the transition
+    landingScreen.classList.add('fade-out');
+
+    // After the transition completes (0.5s), hide landingScreen and show alumniForm
+    setTimeout(() => {
+        landingScreen.classList.add('hidden');
+        alumniForm.classList.remove('hidden');
+      }, 500); // 500ms matches the transition duration in CSS
+    });
     const form = document.getElementById('alumniForm');
     const loadingSpinner = document.getElementById('loadingSpinner');
     const submitButton = document.getElementById('submitButton');
